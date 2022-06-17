@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "uni-app",
+  "usingComponents": {
+    "publish-stream-vue": "/components/publish-stream/publish-stream",
+    "play-stream-vue": "/components/play-stream/play-stream"
+  }
+}
