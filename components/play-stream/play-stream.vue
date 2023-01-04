@@ -12,8 +12,8 @@
 
 <script>
 import { ZegoExpressEngine } from "zego-express-engine-miniprogram"; // 以npm的方式引用
-import { getLoginToken } from '../../api'
-let { appID, server } = getApp().globalData
+let { appID, server, userID } = getApp().globalData
+// 又推又拉，登录房间需要跟推流userID 和 token不一致
 export default {
     props: {
         roomID: {
@@ -26,7 +26,7 @@ export default {
     data() {
         return {
             livePlayerList: [],
-            userID: 'user_' + Math.random(10).toString(16) + Date.now()
+            userID: userID
         };
     },
     computed: {
@@ -65,7 +65,8 @@ export default {
                 return;
             }
             console.log(appID, this.userID)
-            const token = await getLoginToken(appID, this.userID);
+            const token = getApp().globalData.token;
+            debugger
             await this._zg.loginRoom(this.roomID, token, {
                 userID: this.userID, // userID，需用户自己定义，保证全局唯一，建议设置为业务系统中的用户唯一标识
                 userName: this.userID // userName 用户名

@@ -21,7 +21,7 @@ export default {
 		return {
 			roomID: '',
 			canShow: 1,
-			pushStreamID: 'push_stream_' + Math.random(10).toString(16) + Date.now(),
+			pushStreamID: 'push_stream_23',
 		}
 	},
 	onLoad() {

@@ -13,8 +13,8 @@
 
 <script>
 import { ZegoExpressEngine } from "zego-express-engine-miniprogram"; // 以npm的方式引用
-import { getLoginToken } from '../../api'
-let { appID, server } = getApp().globalData
+let { appID, server, userID } = getApp().globalData
+// 又推又拉，登录房间需要跟拉流userID 和 token不一致
 export default {
     props: {
         roomID: {
@@ -27,7 +27,7 @@ export default {
     data() {
         return {
             livePusherUrl: '',
-            userID: 'user_' + Math.random(10).toString(16) + Date.now()
+            userID: userID 
         };
     },
     created() {
@@ -39,11 +39,11 @@ export default {
         // 当用户加入或离开房间时，该事件被触发
         const _this = this
         this._zg.on("roomStreamUpdate", (roomID, updateType, streamList) => {
-            console.log("roomStreamUpdate", roomID, updateType, streamList);
+            console.error("roomStreamUpdate", roomID, updateType, streamList);
         });
         // 用户状态更新回调
         this._zg.on('roomUserUpdate', (roomID, updateType, userList) => {
-            console.warn(
+            console.error(
                 `roomUserUpdate: room ${roomID}, user ${updateType === 'ADD' ? 'added' : 'left'} `,
                 JSON.stringify(userList),
             );
@@ -60,7 +60,7 @@ export default {
                 return;
             }
             console.log(appID, this.userID)
-            const token = await getLoginToken(appID, this.userID);
+            const token = getApp().globalData.token;
             await this._zg.loginRoom(this.roomID, token, {
                 userID: this.userID, // userID，需用户自己定义，保证全局唯一，建议设置为业务系统中的用户唯一标识
                 userName: this.userID // userName 用户名
